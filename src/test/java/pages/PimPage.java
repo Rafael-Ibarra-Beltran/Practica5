@@ -13,9 +13,10 @@ public class PimPage {
     private By employeeNameInput = By.xpath("//label[text()='Employee Name']/parent::div/following-sibling::div//input");
     private By searchButton = By.cssSelector("button[type='submit']");
     private By resetButton = By.xpath("//button[normalize-space()='Reset']");
-    private By noRecordsMessage = By.xpath("//*[contains(text(), 'No Records Found')]");
     private By searchResultsList = By.cssSelector(".oxd-table-body .oxd-table-card");
     private By loadingSpinner = By.className("oxd-loading-spinner");
+    private By employeeIdInput = By.xpath("//label[text()='Employee Id']/parent::div/following-sibling::div//input");
+    private By noRecordsMessage = By.xpath("//div[@class='orangehrm-horizontal-padding orangehrm-vertical-padding']//span[text()='No Records Found']");
 
     public PimPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
@@ -68,5 +69,11 @@ public class PimPage {
         } catch (Exception e) {
             // El spinner puede no aparecer si la respuesta es inmediata.
         }
+    }
+
+    public void searchEmployeeById(String id) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(employeeIdInput)).sendKeys(id);
+        driver.findElement(searchButton).click();
+        waitUntilLoadingFinishes(); // Aprovechando tu excelente método
     }
 }

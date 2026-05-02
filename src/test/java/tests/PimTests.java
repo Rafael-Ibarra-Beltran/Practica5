@@ -40,11 +40,12 @@ public class PimTests extends BaseTest {
 
     @Test(description = "CP-12: Buscar empleado inexistente")
     public void testSearchNonexistentEmployee() {
-        pimPage.searchEmployeeByName("EmpleadoInexistenteQA");
-        int results = pimPage.getResultsCountWithoutWaitingForRows();
+        pimPage.searchEmployeeById("999999999");
 
+        int results = pimPage.getResultsCountWithoutWaitingForRows();
         Assert.assertEquals(results, 0, "No deberían mostrarse empleados para una búsqueda inexistente");
-        Assert.assertTrue(pimPage.isNoRecordsMessageDisplayed(), "Debe mostrarse el mensaje No Records Found");
+
+        Assert.assertTrue(pimPage.isNoRecordsMessageDisplayed(), "Debe mostrarse el mensaje No Records Found en la tabla");
     }
 
     @Test(description = "CP-13: Limpiar filtros de búsqueda en PIM")
