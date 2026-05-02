@@ -38,4 +38,12 @@ public class RecruitmentTests extends BaseTest {
         int results = recruitmentPage.getResultsCount();
         Assert.assertTrue(results > 0, "No se encontraron registros para la vacante seleccionada");
     }
+
+    @Test(description = "CP-14: Limpiar filtros de búsqueda en Recruitment")
+    public void testResetRecruitmentSearchFilters() {
+        recruitmentPage.searchCandidateByKeyword("Software");
+        recruitmentPage.clickReset();
+
+        Assert.assertEquals(recruitmentPage.getKeywordValue(), "", "El filtro Keywords debe quedar vacío");
+    }
 }

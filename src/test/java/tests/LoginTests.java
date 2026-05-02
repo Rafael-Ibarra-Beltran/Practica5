@@ -24,4 +24,12 @@ public class LoginTests extends BaseTest {
         String errorText = loginPage.getErrorMessage();
         Assert.assertEquals(errorText, "Invalid credentials", "El mensaje de error no coincide");
     }
+
+    @Test(description = "CP-09: Validar campos requeridos en Login")
+    public void testRequiredFieldsOnEmptyLogin() {
+        LoginPage loginPage = new LoginPage(driver, wait);
+        loginPage.clickLogin();
+
+        Assert.assertEquals(loginPage.getRequiredMessagesCount(), 2, "Deben mostrarse dos mensajes Required");
+    }
 }

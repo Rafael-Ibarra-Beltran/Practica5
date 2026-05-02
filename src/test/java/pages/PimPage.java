@@ -12,7 +12,10 @@ public class PimPage {
     // Selectores
     private By employeeNameInput = By.xpath("//label[text()='Employee Name']/parent::div/following-sibling::div//input");
     private By searchButton = By.cssSelector("button[type='submit']");
+    private By resetButton = By.xpath("//button[normalize-space()='Reset']");
+    private By noRecordsMessage = By.xpath("//*[contains(text(), 'No Records Found')]");
     private By searchResultsList = By.cssSelector(".oxd-table-body .oxd-table-card");
+    private By loadingSpinner = By.className("oxd-loading-spinner");
 
     public PimPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
@@ -34,10 +37,36 @@ public class PimPage {
 
     public void clickSearch() {
         wait.until(ExpectedConditions.elementToBeClickable(searchButton)).click();
+        waitUntilLoadingFinishes();
+    }
+
+    public void clickReset() {
+        wait.until(ExpectedConditions.elementToBeClickable(resetButton)).click();
+    }
+
+    public String getEmployeeNameValue() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(employeeNameInput)).getAttribute("value");
+    }
+
+    public boolean isNoRecordsMessageDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(noRecordsMessage)).isDisplayed();
     }
 
     public int getResultsCount() {
         wait.until(ExpectedConditions.presenceOfElementLocated(searchResultsList));
         return driver.findElements(searchResultsList).size();
+    }
+
+    public int getResultsCountWithoutWaitingForRows() {
+        waitUntilLoadingFinishes();
+        return driver.findElements(searchResultsList).size();
+    }
+
+    private void waitUntilLoadingFinishes() {
+        try {
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(loadingSpinner));
+        } catch (Exception e) {
+            // El spinner puede no aparecer si la respuesta es inmediata.
+        }
     }
 }

@@ -13,6 +13,7 @@ public class RecruitmentPage {
     private By candidateNameInput = By.xpath("//label[text()='Candidate Name']/parent::div/following-sibling::div//input");
     private By keywordsInput = By.xpath("//label[text()='Keywords']/parent::div/following-sibling::div//input");
     private By searchButton = By.cssSelector("button[type='submit']");
+    private By resetButton = By.xpath("//button[normalize-space()='Reset']");
     private By noRecordsMessage = By.xpath("//p[contains(@class, 'oxd-toast-content-text') and contains(text(), 'No Records Found')]");
     private By searchResultsList = By.cssSelector(".oxd-table-body .oxd-table-card");
     private By loadingSpinner = By.className("oxd-loading-spinner");
@@ -41,11 +42,15 @@ public class RecruitmentPage {
     public void clickSearch() {
         wait.until(ExpectedConditions.elementToBeClickable(searchButton)).click();
 
-        try {
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(loadingSpinner));
-        } catch (Exception e) {
-            // Se ignora si el spinner no aparece
-        }
+        waitUntilLoadingFinishes();
+    }
+
+    public void clickReset() {
+        wait.until(ExpectedConditions.elementToBeClickable(resetButton)).click();
+    }
+
+    public String getKeywordValue() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(keywordsInput)).getAttribute("value");
     }
 
     public boolean isNoRecordsMessageDisplayed() {
@@ -57,5 +62,13 @@ public class RecruitmentPage {
 
         // Si no hay resultados, la tabla no genera las tarjetas (.oxd-table-card)
         return driver.findElements(searchResultsList).size();
+    }
+
+    private void waitUntilLoadingFinishes() {
+        try {
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(loadingSpinner));
+        } catch (Exception e) {
+            // Se ignora si el spinner no aparece
+        }
     }
 }

@@ -31,4 +31,20 @@ public class DashboardTests extends BaseTest {
         wait.until(ExpectedConditions.urlContains("admin"));
         Assert.assertEquals(dashboardPage.getHeaderTitle(), "Admin", "El header no cambió a Admin");
     }
+
+    @Test(description = "CP-10: Cerrar sesión desde Dashboard")
+    public void testLogoutFromDashboard() {
+        dashboardPage.logout();
+
+        wait.until(ExpectedConditions.urlContains("/auth/login"));
+        Assert.assertTrue(driver.getCurrentUrl().contains("/auth/login"), "El usuario no regresó al login");
+    }
+
+    @Test(description = "CP-11: Navegación al módulo PIM")
+    public void testNavigateToPim() {
+        dashboardPage.navigateToPimModule();
+
+        wait.until(ExpectedConditions.urlContains("pim"));
+        Assert.assertEquals(dashboardPage.getHeaderTitle(), "PIM", "El header no cambió a PIM");
+    }
 }
